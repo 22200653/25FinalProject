@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cluplist.mapper.RecruitMapper">
+
+    <select id="selectAll" resultType="com.cluplist.vo.RecruitVO">
+        SELECT r.id, r.title, r.category, r.content, r.deadline,
+        r.writer_user_id AS writerUserId,
+        u.name AS writerName,
+        r.created_at AS createdAt, r.updated_at AS updatedAt
+        FROM recruits r
+        LEFT JOIN users u ON r.writer_user_id = u.id
+        <where>
+            <if test="category != null and category != ''">
+                r.category = #{category}
+            </if>
+        </where>
+        ORDER BY r.id DESC
+    </select>
+
+    <select id="selectById" parameterType="int" resultType="com.cluplist.vo.RecruitVO">
+        SELECT r.id, r.title, r.category, r.content, r.deadline,
+               r.writer_user_id AS writerUserId,
+               u.name AS writerName,
+               r.created_at AS createdAt, r.updated_at AS updatedAt
+        FROM recruits r
+                 LEFT JOIN users u ON r.writer_user_id = u.id
+        WHERE r.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.cluplist.vo.RecruitVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO recruits(title, category, content, deadline, writer_user_id, created_at, updated_at)
+        VALUES(#{title}, #{category}, #{content}, #{deadline}, #{writerUserId}, NOW(), NOW())
+    </insert>
+
+    <update id="update" parameterType="com.cluplist.vo.RecruitVO">
+        UPDATE recruits
+        SET title = #{title},
+            category = #{category},
+            content = #{content},
+            deadline = #{deadline},
+            updated_at = NOW()
+        WHERE id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="int">
+        DELETE FROM recruits WHERE id = #{id}
+    </delete>
+
+</mapper>

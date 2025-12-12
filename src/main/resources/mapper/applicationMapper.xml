@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.cluplist.mapper.ApplicationMapper">
+
+    <select id="selectByRecruitId" parameterType="int" resultType="com.cluplist.vo.ApplicationVO">
+        SELECT a.id,
+               a.recruit_id AS recruitId,
+               a.applicant_user_id AS applicantUserId,
+               u.name AS applicantName,
+               a.message,
+               a.created_at AS createdAt
+        FROM applications a
+                 LEFT JOIN users u ON a.applicant_user_id = u.id
+        WHERE a.recruit_id = #{recruitId}
+        ORDER BY a.id DESC
+    </select>
+
+    <insert id="insert" parameterType="com.cluplist.vo.ApplicationVO" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO applications(recruit_id, applicant_user_id, message, created_at)
+        VALUES(#{recruitId}, #{applicantUserId}, #{message}, NOW())
+    </insert>
+
+</mapper>

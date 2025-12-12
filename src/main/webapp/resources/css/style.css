@@ -1,0 +1,4 @@
+body { font-family: Arial, sans-serif; margin: 20px; }
+.nav { display:flex; gap:12px; align-items:center; }
+.error { color: #c00; }
+textarea { width: 400px; height: 120px; }
